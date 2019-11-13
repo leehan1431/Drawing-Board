@@ -3,6 +3,9 @@ const ctx = canvas.getContext("2d");
 const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
+const saveBtn = document.getElementById("jsSave");
+const cleanBtn = document.getElementById("jsClean");
+
 const INITIAL_COLOR = "black";
 const CNAVAS_SIZE = 500;
 
@@ -13,10 +16,13 @@ let filling = false;
 canvas.width = CNAVAS_SIZE;
 canvas.height = CNAVAS_SIZE;
 
+ctx.fillStyle = "white";
+ctx.fillRect(0,0,CNAVAS_SIZE,CNAVAS_SIZE);
+ctx.fillStyle = "INITIAL_COLOR";
+
 //선색, 선굵기
 ctx.strokeStyle = "INITIAL_COLOR";
 ctx.lineWidth = 1.5;
-ctx.fillStyle = "INITIAL_COLOR";
 
 //선 정지
 function stopPainting(){
@@ -62,7 +68,7 @@ function handlePaintColorClick(event){
 }
 
 //선 굵기 바꾸기
-//Range의 value(굵기)를 가져와 lineWidth에 대입하여 굵기는 바꾼다.
+//Range의 value(굵기)를 가져와 lineWidth에 대입하여 굵기를 바꾼다.
 function handleRangeChange(event){
     const size = event.target.value;
     ctx.lineWidth = size;
@@ -83,17 +89,27 @@ function handleModeClick(evnet){
     }
 }
 
+//캔버스 색 채우기
 function handleCanvasClick(){
     if(filling){
         ctx.fillRect(0,0,CNAVAS_SIZE,CNAVAS_SIZE);
     }
 }
-if(canvas){
-    canvas.addEventListener("mousemove", onMouseMove);
-    canvas.addEventListener("mousedown", startPainting);
-    canvas.addEventListener("mouseup",stopPainting);
-    canvas.addEventListener("mouseleave",stopPainting);
-    canvas.addEventListener("click",handleCanvasClick);
+
+//이미지 저장하기
+function handleSaveClick(){
+    const image = canvas.toDataURL("image/jpeg"); //Default면 png로 저장됨
+    const link = document.createElement("a");
+    link.href = image;
+    link.download = "paintJS[EXPORT]";
+    link.click();
+    
+}
+
+//캔버스 전체 지우기
+function handleCleanClick(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.beginPath();
 }
 
 Array.from(colors).forEach(color =>
@@ -102,10 +118,25 @@ Array.from(colors).forEach(color =>
 Array.from(colors).forEach(color =>
     color.addEventListener("click",handlePaintColorClick)
 );
+
+
+if(canvas){
+    canvas.addEventListener("mousemove", onMouseMove);
+    canvas.addEventListener("mousedown", startPainting);
+    canvas.addEventListener("mouseup",stopPainting);
+    canvas.addEventListener("mouseleave",stopPainting);
+    canvas.addEventListener("click",handleCanvasClick);
+}
 if(range){
     range.addEventListener("input", handleRangeChange);
 }
 if(mode){
     mode.addEventListener("click",handleModeClick);
 
+}
+if(saveBtn){
+    saveBtn.addEventListener("click",handleSaveClick);
+}
+if(cleanBtn){
+    cleanBtn.addEventListener("click",handleCleanClick);
 }
