@@ -1,5 +1,5 @@
 # Drawing Board_Project
-## 프로젝트명 : Drwaing Board
+## 프로젝트명 : Drwaing Board (Chrome)
 ## 팀원 : 이영한
 ## 작업기간 : 2019.11.11 ~ 2019.11.13(3일)
 
